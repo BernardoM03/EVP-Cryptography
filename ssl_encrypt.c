@@ -29,15 +29,13 @@ int encrypt(unsigned char *plaintext, int plain_len, unsigned char *key, unsigne
 
     // initialize cipher context for ssl EVP lib
     ctx = EVP_CIPHER_CTX_new();
-
+    // sets up cipher context to use aes_128_cbc with designated key & iv
     EVP_EncryptInit_ex(ctx, EVP_aes_128_cbc(), NULL, key, iv);
-
+    // encrypts plaintext into ciphertext, change the value of len by passing in the address
     EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plain_len);
-
     ciphertext_len = len;
-
+    // encrypts the final data
     EVP_EncryptFinal_ex(ctx, ciphertext + len, &final_len);
-
     ciphertext_len += final_len;
 
     // free cipher context and return
@@ -53,7 +51,7 @@ int main() {
     //printf("Hello World.\n");
 
     unsigned char plaintext[] = "This is a top secret.";
-    int plain_len = 21;
+    int plain_len = 21; // need to hard code plaintext since sizeof() will include '\n' element in count
     printf("The size of the plaintext '%s' is %d\n", plaintext, plain_len);
 
     unsigned char target_ciphertext[] = {
